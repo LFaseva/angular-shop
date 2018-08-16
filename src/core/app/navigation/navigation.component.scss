@@ -1,0 +1,21 @@
+@import '../../../style/colors.scss';
+.navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: $pink;
+    border-bottom: 2px solid $pink;
+    border-right: 2px solid $pink;
+    div {
+        border-left: 2px solid $pink;
+        padding: 5px;
+        flex-grow: 1;
+        text-align: center;
+        transition: all 1s;
+        cursor: pointer;
+        &:hover {
+            background: $pink;
+            color: $white;
+        }
+    }
+}
