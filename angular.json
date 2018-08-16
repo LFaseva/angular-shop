@@ -23,7 +23,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/style/styles.css"
             ],
             "scripts": []
           },
@@ -72,7 +72,7 @@
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "styles": [
-              "src/styles.css"
+              "src/style/styles.css"
             ],
             "scripts": [],
             "assets": [
@@ -123,5 +123,10 @@
       }
     }
   },
-  "defaultProject": "angular-shop"
+  "defaultProject": "angular-shop",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  }
 }

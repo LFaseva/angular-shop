@@ -1,0 +1,11 @@
+@import 'reset.css';
+@import 'colors.scss';
+* {
+    box-sizing: border-box;
+    transition: all 1s;
+}
+
+.wrapper {
+    width: 1024px;
+    margin: 0 auto;
+}
