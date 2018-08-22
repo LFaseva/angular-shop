@@ -1,0 +1,28 @@
+{
+  "name": "angular-shop",
+  "version": "0.0.0",
+  "scripts": {
+    "start-back": "nodemon ./bin/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LFaseva/angular-shop.git"
+  },
+  "private": true,
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.3.0",
+    "mongoose": "^5.2.9",
+    "morgan": "^1.9.0",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "serve-favicon": "^2.5.0",
+    "zone.js": "~0.8.26"
+  },
+  "devDependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "nodemon": "^1.18.3"
+  }
+}

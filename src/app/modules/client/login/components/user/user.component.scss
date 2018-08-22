@@ -1,0 +1,16 @@
+@import '../../../../../../style/colors.scss';
+.container {
+    display: flex;
+    flex-direction: column;
+    border: 5px solid $white;
+    color: $white;
+    padding: 10px 20px;
+    span {
+        color: black;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    button{
+        margin-top: 10px;
+    }
+}
