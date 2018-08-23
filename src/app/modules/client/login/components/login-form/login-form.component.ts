@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { UserInfoService } from '@shared/user/services';
 // import { Observable } from 'rxjs/Observable';
 // import { tap, catchError } from 'rxjs/operators';
 // import { of } from 'rxjs/observable/of';
@@ -16,7 +17,10 @@ export class LoginFormComponent implements OnInit {
   message = '';
   data: any;
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient,
+    private router: Router,
+    private userInfoService: UserInfoService
+  ) { }
 
   ngOnInit() {
   }
@@ -26,6 +30,8 @@ export class LoginFormComponent implements OnInit {
     this.http.post(url, this.loginData).subscribe(resp => {
       this.data = resp;
       localStorage.setItem('jwtToken', this.data.token);
+      this.userInfoService.setUserName(this.loginData.username);
+      console.log('вошул зарегиный пользователь', this.userInfoService.getUser());
       this.router.navigate(['user']);
     }, err => {
       this.message = err.error.msg;

@@ -7,12 +7,12 @@ import { UserInfoService } from '@shared/user/services';
   styleUrls: ['./user.component.scss'],
 })
 export class UserComponent implements OnInit {
-  user: string;
+  user: any;
 
   constructor(private userInfoService: UserInfoService) { }
 
   ngOnInit() {
-    this.user = this.userInfoService.getUser();
+    this.user = this.userInfoService.getUser().name;
   }
 
 }

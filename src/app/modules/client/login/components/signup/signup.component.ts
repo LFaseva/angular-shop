@@ -31,7 +31,7 @@ export class SignupComponent implements OnInit {
   }
 
   saveUser(name) {
-    this.userInfoService.setUser(name);
+    this.userInfoService.setUserName(name);
   }
 
 }

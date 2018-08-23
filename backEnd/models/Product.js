@@ -1,23 +1,23 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var ItemSchema = new Schema({
-    isbn: {
-        type: String,
-        required: true
-    },
+var ProductSchema = new Schema({
     title: {
         type: String,
         required: true
     },
-    author: {
+    pictureUrl: {
         type: String,
         required: true
     },
-    publisher: {
+    description: {
         type: String,
+        required: true
+    },
+    price: {
+        type: Number,
         required: true
     }
 });
 
-module.exports = mongoose.model('Item', ItemSchema);
+module.exports = mongoose.model('Product', ProductSchema);

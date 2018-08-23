@@ -5,7 +5,7 @@ const db = require('../config/database');
 const jwt = require('jsonwebtoken');
 const router = express.Router(); 
 const User = require("../models/user");
-const Item = require("../models/item");
+const Product = require("../models/product");
 
 // router for signup or new user
 router.post('/signup', function (req, res) {
@@ -73,20 +73,24 @@ router.post('/signin', function (req, res) {
 //     }
 // });
 
-//router for getting list of the books only for authorized users;
-// router.get('/item', passport.authenticate('jwt', { session: false }), function (req, res) {
+// router for getting list of the products only for authorized users;
+// router.get('/book', passport.authenticate('jwt', { session: false }), function (req, res) {
 //     var token = getToken(req.headers);
 //     if (token) {
-//         Item.find(function (err, items) {
+//         debugger;
+//         console.log('authentificate token');
+//         Book.find(function (err, books) {
 //             if (err) return next(err);
-//             res.json(items);
+//             res.json(books);
 //         });
 //     } else {
+//         debugger;
+//         console.log(' NOT!!!! authentificate token');
 //         return res.status(403).send({ success: false, msg: 'Unauthorized.' });
 //     }
 // });
 
-//function for parse autorization token from request headers
+// function for parse autorization token from request headers
 // getToken = function (headers) {
 //     if (headers && headers.authorization) {
 //         var parted = headers.authorization.split(' ');
