@@ -9,6 +9,7 @@ import {
 } from './components';
 import {  LoginModule } from '@client/login';
 import { ProductsModule } from '@client/products';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
   imports: [
@@ -22,6 +23,7 @@ import { ProductsModule } from '@client/products';
     SliderComponent,
     SidebarComponent,
     MainComponent,
+    FooterComponent,
   ],
   exports: [
     HeaderComponent,

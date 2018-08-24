@@ -1,8 +1,10 @@
 var mongoose = require('mongoose');
+mongoose.set('useFindAndModify', false);
 
 const dev_db_url = 'mongodb://admin:Lenuska110589@ds125602.mlab.com:25602/shop';
 
 mongoose.connect(dev_db_url, { useNewUrlParser: true });
+
 mongoose.Promise = global.Promise;
 
 let db = mongoose.connection;

@@ -1,15 +1,15 @@
 <div class="container"  *ngIf="condition">
   <!-- <h1>Book List <button class="btn btn-success" (click)="logout()">Logout</button></h1> -->
   <ul class="productsTable">
-    <h1>вошел пользователь</h1>
-    <!-- <li *ngFor="let product of products">
-      <div class='product-container'>
-        <h3>{{ product.title }}</h3>
-        <img src=${{ product.pictureUrl }} alt='picture'> -->
-        <!-- <p>{{ product.description }}</p> -->
-        <!-- <span>{{ product.price }}</span> -->
-      <!-- </div> -->
-    <!-- </li> -->
+    <li *ngFor="let product of products" class='product-container'>
+        <h3>{{product.title}}</h3>
+        <img src={{product.pictureUrl}} alt='picture'>
+        <p>{{product.description}}</p>
+        <div class='price-block'>
+          <span>{{product.price}}</span>
+          <button>Add to basket</button>
+        </div>
+    </li>
   </ul>
 <div *ngIf="admin">
     <form class="newProductForm" (ngSubmit)="onSubmit(newProductForm)" [formGroup]="newProductForm">

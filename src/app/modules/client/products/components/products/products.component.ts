@@ -27,7 +27,6 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit() {
     this.checkAdmin();
-    this.initForm();
   }
 
   initForm() {
@@ -45,7 +44,7 @@ export class ProductsComponent implements OnInit {
     });
   }
 
-  isControlInvalid(controlName: string): boolean{
+  isControlInvalid(controlName: string): boolean {
     const control = this.newProductForm.controls[controlName];
     const result = control.invalid && control.touched;
     return result;
@@ -68,9 +67,8 @@ export class ProductsComponent implements OnInit {
   }
 
   saveNewProduct(url, product) {
-    this.http.post(url, product).subscribe(resp => {
-     console.log(resp);
-      }, err => {
+    this.http.post(url, product).subscribe(resp => {},
+       err => {
       this.message = err.error.msg;
     });
   }
@@ -80,9 +78,20 @@ export class ProductsComponent implements OnInit {
       this.condition = true;
       if (message.text === 'admin') {
         this.admin = true;
-        console.log('вошул админ');
-
+        this.initForm();
+      } else {
+        this.showProducts('./api/product');
       }
+    });
+  }
+
+  showProducts(url) {
+    this.http.get(url).subscribe((res) => {
+      if (res) {
+         this.products = res;
+      }
+    }, err => {
+      console.log('There is no products');
     });
   }
 }

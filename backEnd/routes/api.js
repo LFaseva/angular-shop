@@ -25,6 +25,7 @@ router.post('/signup', function (req, res) {
         });
     }
 });
+
 router.post('/product', (req, res) => {
     if(!req.body){
         res.json({ success: false, msg: 'You did not add any new product' });
@@ -66,6 +67,18 @@ router.post('/signin', function (req, res) {
             });
         }
     });
+});
+
+//router get product
+router.get('/product', function(req,res) {
+    if (req) {
+        Product.find(function (err, products) {
+            if (err) return next(err);
+            res.json(products);
+        });
+    } else {
+        return res.status(403).send({ success: false, msg: 'no products' });
+    }
 });
 
 
