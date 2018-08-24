@@ -11,9 +11,32 @@
       <!-- </div> -->
     <!-- </li> -->
   </ul>
-  <!-- <div *ngIf="!condition">
-    <h1>вошел админ!!!</h1>
-  </div> -->
+<div *ngIf="admin">
+    <form class="newProductForm" (ngSubmit)="onSubmit(newProductForm)" [formGroup]="newProductForm">
+      <h1>Add new product</h1>
+      <label for='inputTitle'>Title of the product
+        <input type='text' placeholder='title' formControlName="title"/>
+      </label>
+      <div class="error" *ngIf="isControlInvalid('title')">
+        This field is required for input.
+      </div>
+      <img src={{pictureUrl}} alt="picture">
+      <label for='inputDescription'>Description of the product
+        <input type='textarea' placeholder='description' formControlName="description"/>
+      </label>
+      <div class="error" *ngIf="isControlInvalid('description')">
+        This field is required for input.
+      </div>
+      <label for='inputPrice'>Price of the product
+        <input type='text' placeholder='price' formControlName="price"/>
+      </label>
+      <div class="error" *ngIf="isControlInvalid('price')">
+        Price can be only number type.
+      </div>
+      
+      <button type="submit" [disabled]="!newProductForm.valid">Submit</button>
+    </form>
+  </div>
 </div>
 <div class='container' *ngIf="!condition" >
   <h1>вошел не пользователь!!!</h1>

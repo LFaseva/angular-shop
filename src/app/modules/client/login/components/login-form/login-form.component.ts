@@ -31,7 +31,6 @@ export class LoginFormComponent implements OnInit {
       this.data = resp;
       localStorage.setItem('jwtToken', this.data.token);
       this.userInfoService.setUserName(this.loginData.username);
-      console.log('вошул зарегиный пользователь', this.userInfoService.getUser());
       this.router.navigate(['user']);
     }, err => {
       this.message = err.error.msg;

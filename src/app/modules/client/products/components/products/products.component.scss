@@ -1,0 +1,43 @@
+@import '~style/colors.scss';
+*{
+    transition: all 1s;
+}
+.newProductForm {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 30px;
+    border: 5px solid #FFC0CB;
+    color: #721524;
+    max-width: 350px;
+    margin: 20px auto 20px;
+    h1 {
+        font-weight: bold;
+        font-weight: bold;
+        font-size: 24px;
+        align-self: center;
+        margin-bottom: 30px;
+        border-bottom: 2px solid $dark-pink;
+    }
+    label {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    img {
+        margin-bottom: 30px;
+        border: 2px solid $dark-pink;
+        width: 200px;
+        height: 200px;
+        margin: 0 auto 20px;
+    }
+    button {
+        background: $pink;
+        color: $dark-pink;
+        cursor: pointer;
+        &:hover {
+            background: $dark-pink;
+            color: $pink;
+        }
+    }
+}
