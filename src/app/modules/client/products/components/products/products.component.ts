@@ -14,9 +14,10 @@ import { NgForm, FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class ProductsComponent implements OnInit {
 
   products: any;
+  file: any;
   condition: boolean = false;
   admin: boolean = false;
-  pictureUrl: string = 'http://placeimg.com/300/200/nature';
+  // pictureUrl: string = 'http://placeimg.com/300/200';
   newProductForm: FormGroup;
   message: string;
 
@@ -31,17 +32,18 @@ export class ProductsComponent implements OnInit {
 
   initForm() {
     this.newProductForm = this.form.group({
-      title: [null, [
+      title: ['null', [
         Validators.required,
       ]],
-      description: [null, [
+      image: [null, Validators.required],
+      description: ['null', [
         Validators.required,
       ]],
-      price: [null,
+      price: ['null',
         [
           Validators.required,
-        ]]
-    });
+        ]],
+      });
   }
 
   isControlInvalid(controlName: string): boolean {
@@ -53,17 +55,23 @@ export class ProductsComponent implements OnInit {
   onSubmit() {
     const controls = this.newProductForm.controls;
     const inputData = this.newProductForm.value;
-    const url = './api/product';
-
+    const url = './apiProducts/product';
+    // const urlImg = './apiGridFs/upload:id';
     if (this.newProductForm.invalid) {
       Object.keys(controls)
       .forEach(
         controName => controls[controName].markAsTouched());
     }
-    console.log('info on db', inputData);
-    inputData.pictureUrl = this.pictureUrl;
-
-    this.saveNewProduct(url, inputData);
+    inputData.file = this.file;
+    const formData: FormData = new FormData();
+    formData.append('fileKey', this.file, this.file[0].name);
+    return this.http
+      .post(url, formData, {
+        headers : new HttpHeaders().set('content-type', 'multipart/form-data')//  headers: yourHeadersConfig
+      }).subscribe(resp => { },
+        err => {
+          this.message = err.error.msg;
+        });
   }
 
   saveNewProduct(url, product) {
@@ -80,7 +88,7 @@ export class ProductsComponent implements OnInit {
         this.admin = true;
         this.initForm();
       } else {
-        this.showProducts('./api/product');
+        this.showProducts('./apiProducts/product');
       }
     });
   }
@@ -93,5 +101,21 @@ export class ProductsComponent implements OnInit {
     }, err => {
       console.log('There is no products');
     });
+  }
+
+  onFileChange(event) {
+    const reader = new FileReader();
+    if (event.target.files && event.target.files.length) {
+      const [file] = event.target.files;
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        console.log('start to load file');
+        this.newProductForm.patchValue({
+          file: reader.result
+        });
+        this.file = [file];
+        console.log('finish', this.newProductForm);
+      };
+    }
   }
 }

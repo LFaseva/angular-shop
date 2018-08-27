@@ -9,7 +9,7 @@
     padding: 10px 30px;
     border: 5px solid #FFC0CB;
     color: #721524;
-    max-width: 350px;
+    max-width: 500px;
     margin: 20px auto 20px;
     h1 {
         font-weight: bold;
@@ -24,6 +24,9 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 20px;
+        .file {
+            width: 200px;
+        }
     }
     img {
         margin-bottom: 30px;
@@ -80,9 +83,20 @@
             background: $pink;
             cursor: pointer;
         }
-        span{
+        span {
             font-weight: bold;
             text-transform: toUpperCase;
         }
     }
+}
+
+.notUser {
+    display: flex;
+    justify-content: center;
+    margin: 50px auto;
+    color: $dark-pink;
+    font-style: italic;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: underline;
 }

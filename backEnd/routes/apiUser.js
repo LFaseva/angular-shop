@@ -5,7 +5,7 @@ const db = require('../config/database');
 const jwt = require('jsonwebtoken');
 const router = express.Router(); 
 const User = require("../models/user");
-const Product = require("../models/product");
+// const Product = require("../models/product");
 
 // router for signup or new user
 router.post('/signup', function (req, res) {
@@ -26,26 +26,7 @@ router.post('/signup', function (req, res) {
     }
 });
 
-router.post('/product', (req, res) => {
-    if(!req.body){
-        res.json({ success: false, msg: 'You did not add any new product' });
-    } else {
-        let newProduct =  new Product({
-            title: req.body.title,
-            pictureUrl: req.body.pictureUrl,
-            description: req.body.description,
-            price: req.body.price
-        })
-        newProduct.save((err) => {
-            if(err) {
-                return res.json({success: false, msg: 'Product already exist.'});
-            }
-            res.json({success: true, msg: 'Successful create new product.'})
-        })
-    }
-})
-
-// router for login or sign-in
+// router for login or sign-in user
 router.post('/signin', function (req, res) {
     User.findOne({
         username: req.body.username
@@ -69,17 +50,7 @@ router.post('/signin', function (req, res) {
     });
 });
 
-//router get product
-router.get('/product', function(req,res) {
-    if (req) {
-        Product.find(function (err, products) {
-            if (err) return next(err);
-            res.json(products);
-        });
-    } else {
-        return res.status(403).send({ success: false, msg: 'no products' });
-    }
-});
+
 
 
 // //router for adding book only for authorized users

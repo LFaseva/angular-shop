@@ -22,7 +22,7 @@ export class SignupComponent implements OnInit {
   }
 
   signup() {
-     this.http.post('/api/signup', this.signupData).subscribe(resp => {
+     this.http.post('/apiUser/signup', this.signupData).subscribe(resp => {
       this.saveUser(this.signupData.username);
       this.router.navigate(['user']);
     }, err => {

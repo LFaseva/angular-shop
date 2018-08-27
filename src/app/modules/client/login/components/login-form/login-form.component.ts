@@ -26,7 +26,7 @@ export class LoginFormComponent implements OnInit {
   }
 
   login() {
-    const url = '/api/signin';
+    const url = '/apiUser/signin';
     this.http.post(url, this.loginData).subscribe(resp => {
       this.data = resp;
       localStorage.setItem('jwtToken', this.data.token);
