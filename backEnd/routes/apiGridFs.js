@@ -1,11 +1,13 @@
-// var express = require('express');
-// var router = express.Router();
-// var multiparty = require('connect-multiparty')();
-// var Product = require('../models/Product');
+var express = require('express');
+var router = express.Router();
+var multiparty = require('connect-multiparty')();
+var Product = require('../models/Product');
 
-// var fs = require('fs');
-// var mongoose = require('mongoose');
-// var Gridfs = require('gridfs-stream');
+var fs = require('fs');
+var mongoose = require('mongoose');
+var Gridfs = require('gridfs-stream');
+
+router.post('/:id', )
 
 // router.post('/upload/:id', multiparty, function (req, res) {
 //     console.log('req,files0', req.file);

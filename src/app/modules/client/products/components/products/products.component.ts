@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UserInfoService } from '@shared/user/services';
-import { Product } from './product.interface/product.interface';
-import { NgForm, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Product } from '../../interfaces';
+import { NgForm, FormBuilder, FormGroup, Validators,} from '@angular/forms';
 
 
 
@@ -16,8 +16,7 @@ export class ProductsComponent implements OnInit {
   products: any;
   file: any;
   condition: boolean = false;
-  admin: boolean = false;
-  // pictureUrl: string = 'http://placeimg.com/300/200';
+  admin: boolean = true;
   newProductForm: FormGroup;
   message: string;
 
@@ -56,19 +55,18 @@ export class ProductsComponent implements OnInit {
     const controls = this.newProductForm.controls;
     const inputData = this.newProductForm.value;
     const url = './apiProducts/product';
-    // const urlImg = './apiGridFs/upload:id';
     if (this.newProductForm.invalid) {
       Object.keys(controls)
       .forEach(
         controName => controls[controName].markAsTouched());
     }
-    inputData.file = this.file;
     const formData: FormData = new FormData();
-    formData.append('fileKey', this.file, this.file[0].name);
+    formData.append('file', this.file[0], this.file[0].name);
+    Object.keys(inputData).forEach((key) => {
+      formData.append(key, inputData[key]);
+    });
     return this.http
-      .post(url, formData, {
-        headers : new HttpHeaders().set('content-type', 'multipart/form-data')//  headers: yourHeadersConfig
-      }).subscribe(resp => { },
+      .post(url, formData).subscribe(resp => { },
         err => {
           this.message = err.error.msg;
         });
@@ -109,12 +107,10 @@ export class ProductsComponent implements OnInit {
       const [file] = event.target.files;
       reader.readAsDataURL(file);
       reader.onload = () => {
-        console.log('start to load file');
         this.newProductForm.patchValue({
           file: reader.result
         });
         this.file = [file];
-        console.log('finish', this.newProductForm);
       };
     }
   }

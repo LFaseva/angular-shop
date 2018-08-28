@@ -2,6 +2,12 @@ const express = require('express');
 const db = require('../config/database');
 const router = express.Router(); 
 const Product = require("../models/product");
+const multer = require('multer');
+let storage = multer.diskStorage({
+    dest: __dirname + '/files/',
+    filename: file.filename
+});
+let upload = multer({ storage: storage });
 
 //router get product
 router.get('/product', function (req, res) {
@@ -16,25 +22,39 @@ router.get('/product', function (req, res) {
 });
 
 // router for post product to database;
-router.post('/product', (req, res) => {
+router.post('/product', upload.any(), (req, res) => {
+    console.log(req.body);
     debugger;
-    console.log('request with data ', req.body);
-    if (!req.body) {
-        res.json({ success: false, msg: 'You did not add any new product' });
-    } else {
-        let newProduct = new Product({
-            title: req.body.title,
-            description: req.body.description,
-            price: req.body.price
-        })
-        newProduct.save((err) => {
-            if (err) {
-                return res.json({ success: false, msg: 'Product already exist.' });
-            }
-            loadFile();
-            res.json({ success: true, msg: 'Successful create new product.' })
-        })
-    }
+    upload(req, res, function (err) {
+        if (err) {
+            return res.end("Error uploading file.");
+        } else {
+            debugger;
+            console.log(req.body);
+            console.log(req.files);
+            req.files.forEach(function (f) {
+                console.log(f);
+                // and move file to final destination...  
+            });
+            res.end("File has been uploaded");
+        }
+    });
+    // if (!req.body) {
+    //     res.json({ success: false, msg: 'You did not add any new product' });
+    // } else {
+    //     let newProduct = new Product({
+    //         title: req.body.title,
+    //         description: req.body.description,
+    //         price: req.body.price
+    //     })
+    //     newProduct.save((err) => {
+    //         if (err) {
+    //             return res.json({ success: false, msg: 'Product already exist.' });
+    //         }
+    //         loadFile();
+    //         res.json({ success: true, msg: 'Successful create new product.' })
+    //     })
+    // }
 })
 
 loadFile = (path, name, callback) => {
