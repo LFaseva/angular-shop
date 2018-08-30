@@ -28,6 +28,7 @@ router.post('/signup', function (req, res) {
 
 // router for login or sign-in user
 router.post('/signin', function (req, res) {
+    debugger;
     User.findOne({
         username: req.body.username
     }, function (err, user) {

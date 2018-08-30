@@ -1,39 +1,50 @@
-var express = require('express');
-var router = express.Router();
-var multiparty = require('connect-multiparty')();
-var Product = require('../models/Product');
+const mongoose = require('mongoose');
+const express = require('express');
+const app = express.Router(); 
+const path = require('path');
+const crypto = require('crypto');
+const multer = require('multer');
+const GridFsStorage = require('multer-gridfs-storage');
+const Grid = require('gridfs-stream');
+const methodOverride = require('method-override');
+const URI = 'mongodb://admin:Lenuska110589@ds125602.mlab.com:25602/shop';
+const schemaProduct = '../models/Product';
+const conn = mongoose.createConnection(URI);
 
-var fs = require('fs');
-var mongoose = require('mongoose');
-var Gridfs = require('gridfs-stream');
+// init gfs
+let gfs;
+//create stream
+conn.once('open', () => {
+    gfs = new Grid(conn.db, mongoose.mongo);
+    gfs.collection('products');
+})
 
-router.post('/:id', )
+//create storage
+const storage = new GridFsStorage({
+    url: URI,
+    file: (req, file) => {
+        console.log('file',file);
+        console.log('file',req.body);
+        return new Promise((resolve, reject) => {
+            crypto.randomBytes(16, (err, buf) => {
+                if (err) {
+                    return reject(err);
+                }
+                const filename = buf.toString('hex') + path.extname(file.originalname);
+                const fileInfo = {
+                    filename: filename,
+                    // bucketName: 'products'
+                };
+                resolve(fileInfo);
+            });
+        });
+    }
+});
 
-// router.post('/upload/:id', multiparty, function (req, res) {
-//     console.log('req,files0', req.file);
-//     var db = mongoose.connection.db;
-//     var mongoDriver = mongoose.mongo;
-//     var gfs = new Gridfs(db, mongoDriver);
-//     var writestream = gfs.createWriteStream({
-//         filename: req.files.file.name,
-//         mode: 'w',
-//         content_type: req.files.file.mimetype,
-//         metadata: req.body
-//     });
-//     fs.createReadStream(req.files.file.path).pipe(writestream);
+const upload = multer({ storage }).any();
 
-//     writestream.on('close', function (file) {
-//         Product.findById(req.params.id, function (err, user) {
-//             // handle error
-//             product.file = file._id;
-//             product.save(function (err, updateProduct) {
-//                 // handle error
-//                 return res.json(200, updateProduct)
-//             })
-//         });
-//         fs.unlink(req.files.file.path, function (err) {
-//             // handle error
-//             console.log('success!');
-//         });
-//     });
-// });
+app.post('/upload', upload, (req, res) => {
+})
+
+
+module.exports = app;

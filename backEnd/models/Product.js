@@ -7,8 +7,8 @@ const ProductSchema = new Schema({
         type: String,
         required: true
     },
-    pictureUrl: {
-        type: String,
+    image: {
+        type: Buffer,
         required: true
     },
     description: {

@@ -5,7 +5,7 @@ const Product = require("../models/product");
 const multer = require('multer');
 let storage = multer.diskStorage({
     dest: __dirname + '/files/',
-    filename: file.filename
+    // filename: file.filename
 });
 let upload = multer({ storage: storage });
 
@@ -23,22 +23,22 @@ router.get('/product', function (req, res) {
 
 // router for post product to database;
 router.post('/product', upload.any(), (req, res) => {
-    console.log(req.body);
-    debugger;
-    upload(req, res, function (err) {
-        if (err) {
-            return res.end("Error uploading file.");
-        } else {
-            debugger;
-            console.log(req.body);
-            console.log(req.files);
-            req.files.forEach(function (f) {
-                console.log(f);
-                // and move file to final destination...  
-            });
-            res.end("File has been uploaded");
-        }
-    });
+    // console.log(req.body);
+    // debugger;
+    // upload(req, res, function (err) {
+    //     if (err) {
+    //         return res.end("Error uploading file.");
+    //     } else {
+    //         debugger;
+    //         console.log(req.body);
+    //         console.log(req.files);
+    //         req.files.forEach(function (f) {
+    //             console.log(f);
+    //             // and move file to final destination...  
+    //         });
+    //         res.end("File has been uploaded");
+    //     }
+    // });
     // if (!req.body) {
     //     res.json({ success: false, msg: 'You did not add any new product' });
     // } else {
@@ -57,16 +57,16 @@ router.post('/product', upload.any(), (req, res) => {
     // }
 })
 
-loadFile = (path, name, callback) => {
-    debugger;
-    let writestream = GridFS.createWriteStream({
-        filename: name
-    });
-    writestream.on('close', function (file) {
-        callback(null, file);
-    });
-    fs.createReadStream(path).pipe(writestream);
-} 
+// loadFile = (path, name, callback) => {
+//     debugger;
+//     let writestream = GridFS.createWriteStream({
+//         filename: name
+//     });
+//     writestream.on('close', function (file) {
+//         callback(null, file);
+//     });
+//     fs.createReadStream(path).pipe(writestream);
+// } 
 
 module.exports = router;
 
