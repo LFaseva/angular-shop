@@ -7,7 +7,7 @@ const methodOverride = require('method-override');
 
 var apiUser= require('./routes/apiUser');
 var apiProducts= require('./routes/apiProducts');
-var apiGridFs = require('./routes/apiGridFs');
+var apiGridFs = require('./routes/apiGridProducts');
 
 var app = express();
 

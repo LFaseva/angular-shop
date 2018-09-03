@@ -27,6 +27,7 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit() {
     // this.checkAdmin();
+    this.showProducts('./apiGridFs/products');
     this.initForm();
   }
 
@@ -53,17 +54,14 @@ export class ProductsComponent implements OnInit {
   }
 
   onSubmit() {
-    // debugger;
     const controls = this.newProductForm.controls;
     const inputData = this.newProductForm.value;
-    // const url = './apiProducts/product';
     const url = './apiGridFs/upload';
     if (this.newProductForm.invalid) {
       Object.keys(controls)
       .forEach(
         controName => controls[controName].markAsTouched());
     }
-    console.log(this.file);
     const formData: FormData = new FormData();
     formData.append('file', this.file[0], this.file[0].name);
     Object.keys(inputData).forEach((key) => {
@@ -90,7 +88,7 @@ export class ProductsComponent implements OnInit {
         this.admin = true;
         this.initForm();
       } else {
-        this.showProducts('./apiProducts/product');
+        this.showProducts('./apiGridFs/products');
       }
     });
   }
