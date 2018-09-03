@@ -1,121 +1,178 @@
-// const express = require('express');
-// const db = require('../config/database');
-// const router = express.Router(); 
-// const Product = require("../models/product");
-// const multer = require('multer');
-// let storage = multer.diskStorage({
-//     dest: __dirname + '/files/',
-//     // filename: file.filename
-// });
-// let upload = multer({ storage: storage });
+const mongoose = require('mongoose');
+const express = require('express');
+const app = express.Router(); 
+const path = require('path');
+const crypto = require('crypto');
+const multer = require('multer');
+const GridFsStorage = require('multer-gridfs-storage');
+const Grid = require('gridfs-stream');
+const URI = 'mongodb://admin:Lenuska110589@ds125602.mlab.com:25602/shop';
+const conn = mongoose.createConnection(URI, { useNewUrlParser: true });
+const Product = require('../models/Product');
 
-// //router get product
-// router.get('/product', function (req, res) {
-//     if (req) {
-//         Product.find(function (err, products) {
-//             if (err) return next(err);
-//             res.json(products);
-//         });
-//     } else {
-//         return res.status(403).send({ success: false, msg: 'no products' });
-//     }
-// });
+// init gfs
+let gfs;
 
-// // router for post product to database;
-// router.post('/product', upload.any(), (req, res) => {
-//     // console.log(req.body);
-//     // debugger;
-//     // upload(req, res, function (err) {
-//     //     if (err) {
-//     //         return res.end("Error uploading file.");
-//     //     } else {
-//     //         debugger;
-//     //         console.log(req.body);
-//     //         console.log(req.files);
-//     //         req.files.forEach(function (f) {
-//     //             console.log(f);
-//     //             // and move file to final destination...  
-//     //         });
-//     //         res.end("File has been uploaded");
-//     //     }
-//     // });
-//     // if (!req.body) {
-//     //     res.json({ success: false, msg: 'You did not add any new product' });
-//     // } else {
-//     //     let newProduct = new Product({
-//     //         title: req.body.title,
-//     //         description: req.body.description,
-//     //         price: req.body.price
-//     //     })
-//     //     newProduct.save((err) => {
-//     //         if (err) {
-//     //             return res.json({ success: false, msg: 'Product already exist.' });
-//     //         }
-//     //         loadFile();
-//     //         res.json({ success: true, msg: 'Successful create new product.' })
-//     //     })
-//     // }
-// })
+//create stream
+conn.once('open', () => {
+    gfs = new Grid(conn.db, mongoose.mongo);
+    gfs.collection('products');
+})
 
-// // loadFile = (path, name, callback) => {
-// //     debugger;
-// //     let writestream = GridFS.createWriteStream({
-// //         filename: name
-// //     });
-// //     writestream.on('close', function (file) {
-// //         callback(null, file);
-// //     });
-// //     fs.createReadStream(path).pipe(writestream);
-// // } 
+//create storage
+const storage = new GridFsStorage({
+    url: URI,
+    file: (req, file) => {
+        return new Promise((resolve, reject) => {
+            crypto.randomBytes(16, (err, buf) => {
+                if (err) {
+                    return reject(err);
+                }
+                const filename = buf.toString('hex') + path.extname(file.originalname);
+                const fileInfo = {
+                    filename: filename,
+                    metadata: req.body,
+                    id: Date.now(),
+                    bucketName: 'products'
+                };
+                resolve(fileInfo);
+            });
+        });
+    }
+});
 
-// module.exports = router;
+const upload = multer({ storage });
 
+app.post('/upload', upload.single('file'), (req, res) => {
+    res.json({ success: true, msg: 'save file to DB successful'});
+})
 
+app.get('/products',  (req, res) => {
+    gfs.files.find().toArray((err, files) => {
+        // Check if files
+        if (!files || files.length === 0) {
+            res.render('index', { files: false });
+        } else {
+            files.map(file => {
+                if (
+                    file.contentType === 'image/jpeg' ||
+                    file.contentType === 'image/png'
+                ) {
+                    file.isImage = true;
+                } else {
+                    file.isImage = false;
+                }
+            });
+            // res.render('index', { files: files });
+            return res.json(files);
+        }
+    });
+});
 
-// // const multer = require('multer');
-// // var router = express.Router();
-// // const Image = requier('../config/imageFile.js'); //Image
+app.get('/files', (req, res) => {
+    debugger;
+    gfs.files.find().toArray((err, files) => {
+        // Check if files
+        if (!files || files.length === 0) {
+            return res.status(404).json({
+                err: 'No files exist'
+            });
+        }
 
-// // router.getImageById = (id, callback) => {
-// //     Image.find(id, callback);
-// // }
+        // Files exist
+        return res.json(files);
+    });
+});
 
-// // router.addImageById = () => {
-// //     Image.create(image, callback);
-// // }
+app.get('/files/:filename', (req, res) => {
+    gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+        // Check if file
+        if (!file || file.length === 0) {
+            return res.status(404).json({
+                err: 'No file exists'
+            });
+        }
+        // File exists
+        return res.json(file);
+    });
+});
 
-// // const storage = multer.diskStorage({
-// //     destination: (req, file, cb) => {
-// //         cb(null, 'img/')
-// //     },
-// //     filename: (req, file, cb) => {
-// //         cb(null, file.originalname);
-// //     }
-// // });
+app.get('/image/:filename', (req, res) => {
+    gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+        // Check if file
+        if (!file || file.length === 0) {
+            return res.status(404).json({
+                err: 'No file exists'
+            });
+        }
 
-// // const upload = multer({
-// //     storage: storage
-// // });
+        // Check if image
+        if (file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
+            // Read output to browser
+            const readstream = gfs.createReadStream(file.filename);
+            readstream.pipe(res);
+        } else {
+            res.status(404).json({
+                err: 'Not an image'
+            });
+        }
+    });
+});
 
-// // router.get('/', (req, res, next) => {
-// //     console.log('считать инфу с шаблона');
-// //     // res.render(index.ejs);
-// // });
+app.get('/images', (req, res) => {
+    gfs.files.find().toArray((err, files) => {
+        // Check if files
+        if (!files || files.length === 0) {
+            res.render('index', { files: false });
+        } else {
+            files.map(file => {
+                if (
+                    file.contentType === 'image/jpeg' ||
+                    file.contentType === 'image/png'
+                ) {
+                    file.isImage = true;
+                } else {
+                    file.isImage = false;
+                }
+            });
+            res.render('index', { files: files });
+        }
+    });
+});
 
-// // router.post('/', upload.any(), (req, res, next) => {
-// //     res.send(req.files);
-// //     let path = req.files[0].path;
-// //     let imageName = req.files[0].originalname;
+app.delete('/files/:id', (req, res) => {
+//     debugger;
+//     gfs.remove({ 
+//         _id: req.params.id, 
+//         root: 'products'
+//      }, (err, gridStore) => {
+//         if (err) {
+//             return res.status(404).json({ err: err });
+//         }
+        
+// debugger;
+// console.log(gridStore);
+//         // res.redirect('/');
+//     });
+debugger;
+console.log(gfs.files);
+ 
+    let id = Number(req.params.id);
+   
+    gfs.files.remove({ _id: id }, (err, file) => {
+        debugger;
+        // Check if file
+        console.log(file);
+        if (!file || file.length === 0) {
+            return res.status(404).json({
+                err: 'No file exists'
+            });
+        }
+        // File exists
+        // file.remove();
+        debugger;
+        // return res.json(file);
+    });
+});
 
-// //     let imagePath = {};
-// //     imagePath['path'] = path;
-// //     imagePath['originalName'] = imageName;
-
-// //     router.addImage(imagePath, (err) => {
-
-// //     });
-// // })
-
-// // module.exports = router;
-
-
+module.exports = app;

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpRequest} from '@angular/common/http';
 import { UserInfoService } from '@shared/user/services';
 import { Product } from '../../interfaces';
-import { NgForm, FormBuilder, FormGroup, Validators,} from '@angular/forms';
+import { NgForm, FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 
 
@@ -27,7 +27,7 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit() {
     // this.checkAdmin();
-    this.showProducts('./apiGridFs/products');
+    this.showProducts('./apiProducts/products');
     this.initForm();
   }
 
@@ -36,7 +36,6 @@ export class ProductsComponent implements OnInit {
       title: ['null', [
         Validators.required,
       ]],
-      image: [null, Validators.required],
       description: ['null', [
         Validators.required,
       ]],
@@ -44,6 +43,7 @@ export class ProductsComponent implements OnInit {
         [
           Validators.required,
         ]],
+      id: [null]
       });
   }
 
@@ -56,7 +56,7 @@ export class ProductsComponent implements OnInit {
   onSubmit() {
     const controls = this.newProductForm.controls;
     const inputData = this.newProductForm.value;
-    const url = './apiGridFs/upload';
+    const url = './apiProducts/upload';
     if (this.newProductForm.invalid) {
       Object.keys(controls)
       .forEach(
@@ -88,7 +88,7 @@ export class ProductsComponent implements OnInit {
         this.admin = true;
         this.initForm();
       } else {
-        this.showProducts('./apiGridFs/products');
+        this.showProducts('./apiProducts/products');
       }
     });
   }
@@ -116,4 +116,13 @@ export class ProductsComponent implements OnInit {
       };
     }
   }
+  deleteProduct(id) {
+    debugger;
+    const url = './apiProducts/files/' + id;
+    console.log('url', url);
+    this.http.delete(url).subscribe(resp => { },
+      err => {
+        this.message = err.error.msg;
+      });
+    }
 }

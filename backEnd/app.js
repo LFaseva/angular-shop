@@ -7,7 +7,6 @@ const methodOverride = require('method-override');
 
 var apiUser= require('./routes/apiUser');
 var apiProducts= require('./routes/apiProducts');
-var apiGridFs = require('./routes/apiGridProducts');
 
 var app = express();
 
@@ -19,8 +18,8 @@ app.use(methodOverride('_method'));
 // app.use(express.static(path.join(__dirname, 'dist')));
 // app.use('/', express.static(path.join(__dirname, 'dist')));
 app.use('/apiUser', apiUser);
-app.use('/apiGridFs', apiGridFs);
-// app.use('/apiProducts', apiProducts);
+app.use('/apiProducts', apiProducts);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
