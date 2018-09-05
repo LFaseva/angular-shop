@@ -10,6 +10,7 @@ import {
 import {  LoginModule } from '@client/login';
 import { ProductsModule } from '@client/products';
 import { FooterComponent } from './components/footer/footer.component';
+import { LoaderComponent } from '@shared/loader/component/loader/loader.component';
 
 @NgModule({
   imports: [
@@ -32,5 +33,8 @@ import { FooterComponent } from './components/footer/footer.component';
     SidebarComponent,
     MainComponent,
   ],
+  entryComponents: [
+    LoaderComponent
+  ]
 })
 export class BaseLayoutModule { }

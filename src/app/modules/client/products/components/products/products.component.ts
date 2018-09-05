@@ -117,9 +117,7 @@ export class ProductsComponent implements OnInit {
     }
   }
   deleteProduct(id) {
-    debugger;
     const url = './apiProducts/files/' + id;
-    console.log('url', url);
     this.http.delete(url).subscribe(resp => { },
       err => {
         this.message = err.error.msg;

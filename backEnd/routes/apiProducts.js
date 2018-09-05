@@ -141,37 +141,14 @@ app.get('/images', (req, res) => {
 });
 
 app.delete('/files/:id', (req, res) => {
-//     debugger;
-//     gfs.remove({ 
-//         _id: req.params.id, 
-//         root: 'products'
-//      }, (err, gridStore) => {
-//         if (err) {
-//             return res.status(404).json({ err: err });
-//         }
-        
-// debugger;
-// console.log(gridStore);
-//         // res.redirect('/');
-//     });
-debugger;
-console.log(gfs.files);
- 
     let id = Number(req.params.id);
-   
     gfs.files.remove({ _id: id }, (err, file) => {
-        debugger;
         // Check if file
-        console.log(file);
         if (!file || file.length === 0) {
             return res.status(404).json({
                 err: 'No file exists'
             });
         }
-        // File exists
-        // file.remove();
-        debugger;
-        // return res.json(file);
     });
 });
 
