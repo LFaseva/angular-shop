@@ -5,7 +5,7 @@ const MiniCssExtractPlugin = require( 'mini-css-extract-plugin');
 module.exports = {
     entry: {
         // 'polyfills': './src/polyfills.ts',
-        'app': './src/core/main.ts'
+        'app': './src/app/client/main-client.ts'
     },
     output: {
         path: path.resolve(__dirname, './public'),     // путь к каталогу выходных файлов - папка public

@@ -1,0 +1,17 @@
+@import '../../style/colors.scss';
+.central {
+    display: flex;
+}
+
+.sidebar {
+    flex-grow: 1;
+    flex-basis: 150px;
+    background: $pink;
+    color: $white;
+}
+
+.main {
+    flex-grow: 1;
+    background: $white;
+    width: 70%;
+}

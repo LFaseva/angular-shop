@@ -15,7 +15,7 @@
           "options": {
             "outputPath": "dist/angular-shop",
             "index": "src/index.html",
-            "main": "src/main.ts",
+            "main": "src/app/client/main-client.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
