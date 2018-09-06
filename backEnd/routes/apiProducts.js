@@ -149,6 +149,7 @@ app.delete('/files/:id', (req, res) => {
                 err: 'No file exists'
             });
         }
+        res.json({success: true});
     });
 });
 

@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpRequest} from '@angular/common/http';
 import { UserInfoService } from '@shared/user/services';
 import { Product } from '../../interfaces';
 import { NgForm, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { forEach } from '@angular/router/src/utils/collection';
 
 
 
@@ -33,13 +34,13 @@ export class ProductsComponent implements OnInit {
 
   initForm() {
     this.newProductForm = this.form.group({
-      title: ['null', [
+      title: ['new product title', [
         Validators.required,
       ]],
-      description: ['null', [
+      description: ['new product description', [
         Validators.required,
       ]],
-      price: ['null',
+      price: ['new product price',
         [
           Validators.required,
         ]],
@@ -68,7 +69,12 @@ export class ProductsComponent implements OnInit {
       formData.append(key, inputData[key]);
     });
     return this.http
-      .post(url, formData).subscribe(resp => { },
+      .post(url, formData).subscribe(resp => {
+      if(resp){
+        // debugger;
+        this.showProducts('./apiProducts/products');
+      }
+       },
         err => {
           this.message = err.error.msg;
         });
@@ -118,7 +124,15 @@ export class ProductsComponent implements OnInit {
   }
   deleteProduct(id) {
     const url = './apiProducts/files/' + id;
-    this.http.delete(url).subscribe(resp => { },
+    this.http.delete(url).subscribe(resp => {
+        if(resp){
+          this.products.forEach((product) => {
+            if (product._id === id) {
+              this.products.splice(this.products.indexOf(product), 1);
+            }
+        }   
+      )}
+     },
       err => {
         this.message = err.error.msg;
       });
