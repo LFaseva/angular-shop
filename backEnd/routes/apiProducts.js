@@ -44,7 +44,14 @@ const storage = new GridFsStorage({
 const upload = multer({ storage });
 
 app.post('/upload', upload.single('file'), (req, res) => {
-    res.json({ success: true, msg: 'save file to DB successful'});
+    res.json({ success: true, msg: 'save file to DB successful', 
+    data: {
+        title: req.body.title,
+        description: req.body.description,
+        filename:  req.file.filename,
+        price: req.body.price,
+        id: req.body._id
+    }});
 })
 
 app.get('/products',  (req, res) => {
@@ -64,7 +71,16 @@ app.get('/products',  (req, res) => {
                 }
             });
             // res.render('index', { files: files });
-            return res.json(files);
+            //переделать на общую функцию!!
+            return res.json(files.map((file)=> {
+                return{
+                    id: file._id,
+                    title: file.metadata.title,
+                    description: file.metadata.description,
+                    price: file.metadata.price,
+                    filename: file.filename
+                }
+            }));
         }
     });
 });

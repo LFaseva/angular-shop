@@ -14,7 +14,7 @@ import { forEach } from '@angular/router/src/utils/collection';
 })
 export class ProductsComponent implements OnInit {
 
-  products: any;
+  products: any[];
   file: any;
   condition: boolean = false;
   admin: boolean = true;
@@ -68,13 +68,13 @@ export class ProductsComponent implements OnInit {
     Object.keys(inputData).forEach((key) => {
       formData.append(key, inputData[key]);
     });
+    
     return this.http
-      .post(url, formData).subscribe(resp => {
-      if(resp){
-        // debugger;
-        this.showProducts('./apiProducts/products');
-      }
-       },
+      .post(url, formData).subscribe((resp:any) => {
+      if(resp && resp.success){
+        this.products.push(resp.data);
+          }
+        },
         err => {
           this.message = err.error.msg;
         });

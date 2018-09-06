@@ -1,13 +1,13 @@
 <div class="container"  *ngIf="!condition">
   <ul class="productsTable">
     <li *ngFor="let product of products" class='product-container'>
-        <h3>{{product.metadata.title}}</h3>
+        <h3>{{product.title}}</h3>
         <img src ="apiProducts/image/{{product.filename}}" alt='picture'> 
-        <p>{{product.metadata.description}}</p> 
+        <p>{{product.description}}</p> 
         <div class='price-block'>
-          <span>{{product.metadata.price}}</span>
+          <span>{{product.price}}</span>
           <button>Add to basket</button>
-          <button *ngIf='admin' (click)="deleteProduct(product._id)">delete</button>
+          <button *ngIf='admin' (click)="deleteProduct(product.id)">delete</button>
         </div> 
     </li>
   </ul>
