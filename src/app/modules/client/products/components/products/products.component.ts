@@ -14,7 +14,7 @@ import { forEach } from '@angular/router/src/utils/collection';
 })
 export class ProductsComponent implements OnInit {
 
-  products: any[];
+  products: any;
   file: any;
   condition: boolean = false;
   admin: boolean = true;
@@ -127,7 +127,7 @@ export class ProductsComponent implements OnInit {
     this.http.delete(url).subscribe(resp => {
         if(resp){
           this.products.forEach((product) => {
-            if (product._id === id) {
+            if (product.id === id) {
               this.products.splice(this.products.indexOf(product), 1);
             }
         }   
