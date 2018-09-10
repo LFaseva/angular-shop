@@ -11,6 +11,7 @@ import { LoaderComponent } from '@shared/loader/component/loader/loader.componen
 })
 
 export class LoaderInterceptorService implements HttpInterceptor {
+  private counter : number = 0;
 
   constructor(private domService: DomService) { }
 
@@ -30,9 +31,15 @@ export class LoaderInterceptorService implements HttpInterceptor {
     this.hideLoader();
   }
   private showLoader(): void {
-    this.domService.appendComponentToBody(LoaderComponent);
+    if(this.counter === 0){
+      this.domService.appendComponentToBody(LoaderComponent);
+      this.counter++;
+    }
   }
   private hideLoader(): void {
-    this.domService.deleteComponentFromBody();
+    if(this.counter === 1){
+      this.domService.deleteComponentFromBody();
+      this.counter--;
+    }
   }
 }

@@ -1,11 +1,15 @@
 const express = require('express');
 const passport = require('passport');
+const mongoose = require('mongoose');
 const db = require('../config/database');
-// require('../config/passport')(passport);
+require('../config/passport')(passport);
 const jwt = require('jsonwebtoken');
 const router = express.Router(); 
 const User = require("../models/user");
-// const Product = require("../models/product");
+
+mongoose.Promise = require('bluebird');
+mongoose.connect(db.database, { promiseLibrary: require('bluebird') })
+    .catch((err) => console.error(err));
 
 // router for signup or new user
 router.post('/signup', function (req, res) {
@@ -28,7 +32,6 @@ router.post('/signup', function (req, res) {
 
 // router for login or sign-in user
 router.post('/signin', function (req, res) {
-    debugger;
     User.findOne({
         username: req.body.username
     }, function (err, user) {
@@ -51,8 +54,15 @@ router.post('/signin', function (req, res) {
     });
 });
 
-
-
+router.post('/user', (req, res) => {
+    const token = req.body.token.slice(4);
+    jwt.verify(token, db.secret, (err, success) => {
+    if (err) {
+        res.json({ success: false, msg: 'unauthorized user'})
+        }
+        res.json({ success: true, username: success.username });
+    });
+});
 
 // //router for adding book only for authorized users
 // router.post('/item', passport.authenticate('jwt', { session: false }), function (req, res) {

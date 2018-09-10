@@ -1,22 +1,22 @@
-var express = require('express');
-var path = require('path');
-var logger = require('morgan');
-var bodyParser = require('body-parser');
-var passport = require('passport');
+const express = require('express');
+const path = require('path');
+const logger = require('morgan');
+const bodyParser = require('body-parser');
+const passport = require('passport');
 const methodOverride = require('method-override');
 
-var apiUser= require('./routes/apiUser');
-var apiProducts= require('./routes/apiProducts');
+const apiUser= require('./routes/apiUser');
+const apiProducts= require('./routes/apiProducts');
 
-var app = express();
+const app = express();
 
-// app.use(passport.initialize());
-// app.use(logger('dev'));
+app.use(passport.initialize());
+app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(methodOverride('_method'));
-// app.use(bodyParser.urlencoded({ 'extended': 'false' }));
-// app.use(express.static(path.join(__dirname, 'dist')));
-// app.use('/', express.static(path.join(__dirname, 'dist')));
+app.use(bodyParser.urlencoded({ 'extended': 'false' }));
+app.use(express.static(path.join(__dirname, 'dist')));
+app.use('/', express.static(path.join(__dirname, 'dist')));
 app.use('/apiUser', apiUser);
 app.use('/apiProducts', apiProducts);
 

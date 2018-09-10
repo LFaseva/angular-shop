@@ -23,7 +23,6 @@ export class DomService {
 
     const domElem = (this.componentRef.hostView as EmbeddedViewRef<any>)
       .rootNodes[0] as HTMLElement;
-
     document.body.appendChild(domElem);
   }
 
