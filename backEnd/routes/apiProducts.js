@@ -157,16 +157,32 @@ app.get('/images', (req, res) => {
 });
 
 app.delete('/files/:id', (req, res) => {
+    
     let id = Number(req.params.id);
-    gfs.files.remove({ _id: id }, (err, file) => {
-        // Check if file
-        if (!file || file.length === 0) {
-            return res.status(404).json({
-                err: 'No file exists'
-            });
-        }
-        res.json({success: true});
-    });
+           gfs.db.collection('products' + '.files').deleteOne({ _id: id }, function (err, file) {
+            if (!file || file.length === 0) {
+                return res.status(404).json({
+                    err: 'No chunks exists'
+                });
+            }
+            debugger;
+        });
+        // gfs.db.collection('products' + '.chunks').count({ files_id: id }, function (err, number) {
+        //     debugger;
+        //     console.log(number);
+        //     // console.log(number.deletedCount);
+        //     // res.json({ success: true });
+        // });
+        gfs.db.collection('products' + '.chunks').deleteMany({ files_id: id }, function (err, number) {
+            debugger;
+            if (number.deletedCount === 0){
+                res.json({ success: false, msg: 'chunks are not delete' });
+            }
+            console.log(number.deletedCount);
+            res.json({ success: { chunsk: number.deletedCount} });
+        });
+
+   
 });
 
 module.exports = app;
