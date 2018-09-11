@@ -72,7 +72,7 @@ export class ProductsComponent implements OnInit {
     return this.http
       .post(url, formData).subscribe((resp:any) => {
       if(resp && resp.success){
-        this.products.push(resp.data);
+          this.products.push(resp.data);
           }
         },
         err => {

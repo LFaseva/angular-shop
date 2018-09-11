@@ -50,7 +50,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
         description: req.body.description,
         filename:  req.file.filename,
         price: req.body.price,
-        id: req.body._id
+        id: req.file.id
     }});
 })
 
@@ -159,30 +159,48 @@ app.get('/images', (req, res) => {
 app.delete('/files/:id', (req, res) => {
     
     let id = Number(req.params.id);
-           gfs.db.collection('products' + '.files').deleteOne({ _id: id }, function (err, file) {
-            if (!file || file.length === 0) {
-                return res.status(404).json({
-                    err: 'No chunks exists'
-                });
-            }
-            debugger;
-        });
-        // gfs.db.collection('products' + '.chunks').count({ files_id: id }, function (err, number) {
-        //     debugger;
-        //     console.log(number);
-        //     // console.log(number.deletedCount);
-        //     // res.json({ success: true });
-        // });
-        gfs.db.collection('products' + '.chunks').deleteMany({ files_id: id }, function (err, number) {
-            debugger;
-            if (number.deletedCount === 0){
-                res.json({ success: false, msg: 'chunks are not delete' });
-            }
-            console.log(number.deletedCount);
-            res.json({ success: { chunsk: number.deletedCount} });
-        });
+    deleteFile(id)
+    .then(()=>{
+        return deleteChunks(id);
+    })
+    .then(()=>{
+        res.json({
+            success: true,
+            msg: 'file and chunks deleted',
+        })
+    })
+    .catch((err)=> {
+        res.json({
+            success: false,
+            msg: err,
+        })
+    })
+}, );
 
-   
-});
+const deleteFile = (id) => {
+    return  new Promise((resolve, reject)=>{
+        gfs.db.collection('products' + '.files').deleteOne({ _id: id }, function (err, data) {
+            if (!data || data.length === 0) {
+                debugger;
+                reject(res.status(404).json({
+                    err: 'No file exists'
+                }));
+            }
+            resolve(true);
+        })
+    })
+}
+
+const deleteChunks = (id) => {
+    return new Promise((resolve, reject) => {
+        gfs.db.collection('products' + '.chunks').deleteMany({ files_id: id }, function (err, number) {
+            if (number.deletedCount === 0) {
+    
+                return reject('there is no chunks');
+            }
+            resolve(true);
+        });
+    })
+}
 
 module.exports = app;

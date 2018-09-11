@@ -26,11 +26,6 @@ const appRoutes: Routes = [
     component: UserComponent,
     data: { title: 'User' }
   },
-  // {
-  //   path: '',
-  //   redirectTo: '/item',
-  //   pathMatch: 'full'
-  // }
 ];
 
 @NgModule({
