@@ -71,9 +71,10 @@ export class ProductsComponent implements OnInit {
     
     return this.http
       .post(url, formData).subscribe((resp:any) => {
-      if(resp && resp.success){
+        if(resp && resp.success){
           this.products.push(resp.data);
           }
+          console.log('file is too big try another');
         },
         err => {
           this.message = err.error.msg;
@@ -81,7 +82,8 @@ export class ProductsComponent implements OnInit {
   }
 
   saveNewProduct(url, product) {
-    this.http.post(url, product).subscribe(resp => {},
+    this.http.post(url, product).subscribe(resp => {
+      },
        err => {
       this.message = err.error.msg;
     });
@@ -111,17 +113,24 @@ export class ProductsComponent implements OnInit {
 
   onFileChange(event) {
     const reader = new FileReader();
-    if (event.target.files && event.target.files.length) {
-      const [file] = event.target.files;
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        this.newProductForm.patchValue({
-          file: reader.result
-        });
-        this.file = [file];
-      };
+    const file = event.target.files;
+     if (file && file.length) {
+      //limitation for loading files more then 1000000 bytes
+      if (file[0].size <= 1000000) {
+        const [file] = event.target.files;
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          this.newProductForm.patchValue({
+            file: reader.result
+          });
+          this.file = [file];
+        };
+      } else {
+        throw console.error("File is too large.");
+      }
     }
   }
+
   deleteProduct(id) {
     const url = './apiProducts/files/' + id;
     this.http.delete(url).subscribe(resp => {

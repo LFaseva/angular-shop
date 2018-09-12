@@ -41,17 +41,26 @@ const storage = new GridFsStorage({
     }
 });
 
-const upload = multer({ storage });
+const upload = multer({ storage: storage, limits: { fileSize: 1000000 } }).single('file');
 
-app.post('/upload', upload.single('file'), (req, res) => {
-    res.json({ success: true, msg: 'save file to DB successful', 
-    data: {
-        title: req.body.title,
-        description: req.body.description,
-        filename:  req.file.filename,
-        price: req.body.price,
-        id: req.file.id
-    }});
+app.post('/upload', (req, res) => {
+    upload(req, res, (err) => {
+        if (err) {
+            return res.json({
+                success: false, msg: 'File is too big'
+            });
+        }
+        res.json({
+            success: true, msg: 'Save file to DB successful',
+            data: {
+                title: req.body.title,
+                description: req.body.description,
+                filename: req.file.filename,
+                price: req.body.price,
+                id: req.file.id
+            }
+        });
+    })
 })
 
 app.get('/products',  (req, res) => {
@@ -86,7 +95,6 @@ app.get('/products',  (req, res) => {
 });
 
 app.get('/files', (req, res) => {
-    debugger;
     gfs.files.find().toArray((err, files) => {
         // Check if files
         if (!files || files.length === 0) {
@@ -157,7 +165,6 @@ app.get('/images', (req, res) => {
 });
 
 app.delete('/files/:id', (req, res) => {
-    
     let id = Number(req.params.id);
     deleteFile(id)
     .then(()=>{
@@ -181,7 +188,6 @@ const deleteFile = (id) => {
     return  new Promise((resolve, reject)=>{
         gfs.db.collection('products' + '.files').deleteOne({ _id: id }, function (err, data) {
             if (!data || data.length === 0) {
-                debugger;
                 reject(res.status(404).json({
                     err: 'No file exists'
                 }));
@@ -195,7 +201,6 @@ const deleteChunks = (id) => {
     return new Promise((resolve, reject) => {
         gfs.db.collection('products' + '.chunks').deleteMany({ files_id: id }, function (err, number) {
             if (number.deletedCount === 0) {
-    
                 return reject('there is no chunks');
             }
             resolve(true);
