@@ -159,23 +159,28 @@ app.get('/images', (req, res) => {
 app.delete('/files/:id', (req, res) => {
     
     let id = Number(req.params.id);
-    deleteFile(id)
-    .then(()=>{
-        return deleteChunks(id);
-    })
-    .then(()=>{
-        res.json({
-            success: true,
-            msg: 'file and chunks deleted',
-        })
-    })
-    .catch((err)=> {
-        res.json({
-            success: false,
-            msg: err,
-        })
-    })
-}, );
+
+    const deleteProduct = async(id) => {
+        try{
+            const file = await deleteFile(id);
+            const chunks = await deleteChunks(id);
+            if (file && chunks){
+                return res.json({
+                    success: true,
+                    msg: 'file and chunks deleted',
+                });
+            }
+        }
+        
+        catch (err) {
+            res.json({
+                success: false,
+                msg: err,
+            })
+        }
+    }
+    deleteProduct(id);
+});
 
 const deleteFile = (id) => {
     return  new Promise((resolve, reject)=>{
