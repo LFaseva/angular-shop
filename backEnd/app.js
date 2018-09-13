@@ -5,8 +5,8 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const methodOverride = require('method-override');
 
-const apiUser= require('./routes/apiUser');
-const apiProducts= require('./routes/apiProducts');
+const apiUser = require('./src/routes/apiUser');
+const apiProducts = require('./src/routes/apiProducts');
 
 const app = express();
 
